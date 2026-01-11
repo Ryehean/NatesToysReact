@@ -11,6 +11,7 @@
     <Folder Include="DTOs\" />
     <Folder Include="Extensions\" />
     <Folder Include="Middleware\" />
+    <Folder Include="RequestHelpers\" />
   </ItemGroup>
 
   <ItemGroup>
