@@ -5,7 +5,7 @@ namespace API.Entities;
 public class Cart
 {
     public int Id { get; set; }
-    public string CartId { get; set; }
+    public required string CartId { get; set; }
 
     public List<CartItem> Items { get; set; } = [];
 
