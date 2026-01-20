@@ -81,7 +81,7 @@ public class CartController(StoreContext context) : BaseApiController
         return await context.Carts
         .Include(x => x.Items)
         .ThenInclude(x => x.Product)
-        .FirstOrDefaultAsync(x => x.CartId == Request.Cookies["cartid"]);
+        .FirstOrDefaultAsync(x => x.CartId == Request.Cookies["cartId"]);
     }
 
 }

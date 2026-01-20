@@ -2,6 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithErrorHandling } from "../../app/api/baseApi";
 import { Item, type Cart } from "../../app/models/cart";
 import type { Product } from "../../app/models/product";
+import Cookies from 'js-cookie';
 
 function isCartItem(product: Product | Item): product is Item {
     return (product as Item).quantity !== undefined;
@@ -76,8 +77,19 @@ export const cartApi = createApi({
                     patchResult.undo();
                 }
             }
+        }),
+        clearCart: builder.mutation<void, void>({
+            queryFn: () => ({ data: undefined }),
+            onQueryStarted: async (_, { dispatch }) => {
+                dispatch(
+                    cartApi.util.updateQueryData('fetchCart', undefined, (draft) => {
+                        draft.items = []
+                    })
+                );
+                Cookies.remove('cartId')
+            }
         })
     })
 })
 
-export const { useFetchCartQuery, useAddCartItemMutation, useRemoveCartItemMutation } = cartApi;
+export const { useFetchCartQuery, useAddCartItemMutation, useRemoveCartItemMutation, useClearCartMutation } = cartApi;

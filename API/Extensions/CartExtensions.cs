@@ -1,6 +1,7 @@
 using System;
 using API.DTOs;
 using API.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Extensions;
 
@@ -11,6 +12,8 @@ public static class CartExtensions
         return new CartDto
         {
             CartId = cart.CartId,
+            ClientSecret = cart.ClientSecret,
+            PaymentIntentId = cart.PaymentIntentId,
             Items = cart.Items.Select(x => new CartItemDto
             {
                 ProductId = x.ProductId,
@@ -22,5 +25,15 @@ public static class CartExtensions
                 Quantity = x.Quantity
             }).ToList()
         };
+    }
+
+    public static async Task<Cart> GetCartWithItems(this IQueryable<Cart> query,
+        string? cartId)
+    {
+        return await query
+        .Include(x => x.Items)
+        .ThenInclude(x => x.Product)
+        .FirstOrDefaultAsync(x => x.CartId == cartId)
+            ?? throw new Exception("Cannot get cart");
     }
 }
